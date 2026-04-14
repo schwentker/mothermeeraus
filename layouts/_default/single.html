@@ -1,0 +1,12 @@
+{{ define "main" }}
+  <article class="content-wrap">
+    <header class="page-intro page-card">
+      <p class="eyebrow">{{ .Section | humanize }}</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}<p class="lede">{{ . }}</p>{{ end }}
+      <div class="prose">
+        {{ .Content }}
+      </div>
+    </header>
+  </article>
+{{ end }}

@@ -1,0 +1,42 @@
+baseURL = "https://mothermeera.us/"
+languageCode = "en-us"
+title = "Mother Meera US"
+enableRobotsTXT = true
+
+[params]
+description = "A calm, factual introduction to Mother Meera, darshan, and future US event information."
+tagline = "A quiet informational home for Mother Meera in the United States."
+
+[permalinks]
+events = "/events/:slug/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = false
+
+[menus]
+  [[menus.main]]
+    name = "About"
+    pageRef = "/about"
+    weight = 10
+  [[menus.main]]
+    name = "Darshan"
+    pageRef = "/darshan"
+    weight = 20
+  [[menus.main]]
+    name = "Events"
+    pageRef = "/events"
+    weight = 30
+  [[menus.main]]
+    name = "Media"
+    pageRef = "/media"
+    weight = 40
+  [[menus.main]]
+    name = "Connect"
+    pageRef = "/connect"
+    weight = 50
+  [[menus.main]]
+    name = "Contact"
+    pageRef = "/contact"
+    weight = 60

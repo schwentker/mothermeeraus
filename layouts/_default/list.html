@@ -1,0 +1,27 @@
+{{ define "main" }}
+  <section class="content-wrap">
+    <header class="page-intro page-card">
+      <p class="eyebrow">Section</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}<p class="lede">{{ . }}</p>{{ end }}
+      <div class="prose">
+        {{ .Content }}
+      </div>
+    </header>
+
+    {{ if .Pages }}
+      <section class="section-grid" aria-label="{{ .Title }} pages">
+        {{ range .Pages.ByTitle }}
+          <article class="section-card">
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ with .Summary }}
+              <div class="prose">{{ . }}</div>
+            {{ else }}
+              {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+            {{ end }}
+          </article>
+        {{ end }}
+      </section>
+    {{ end }}
+  </section>
+{{ end }}

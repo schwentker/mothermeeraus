@@ -1,0 +1,94 @@
+{{ define "main" }}
+  {{ $isVideo := eq .Params.mediaType "video" }}
+  {{ $youtubeID := .Params.youtube_id }}
+  {{ $embedURL := .Params.embed_url }}
+  {{ $preview := .Params.thumbnail }}
+  <article class="content-wrap">
+    <header class="page-intro page-card">
+      <p class="eyebrow">{{ .Params.mediaType | default "media" | humanize }}</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}<p class="lede">{{ . }}</p>{{ end }}
+    </header>
+
+    <section class="section-grid media-layout" aria-label="Media item">
+      <section class="section-card">
+        <h2>{{ if $isVideo }}Video{{ else }}Image{{ end }}</h2>
+        {{ if $isVideo }}
+          {{ if $youtubeID }}
+            <div class="media-embed">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/{{ $youtubeID }}"
+                title="{{ .Title }}"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+            </div>
+          {{ else if $embedURL }}
+            <div class="media-embed">
+              <iframe
+                src="{{ $embedURL }}"
+                title="{{ .Title }}"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+            </div>
+          {{ else }}
+            <p>No embed URL has been added for this video yet.</p>
+          {{ end }}
+        {{ else if $preview }}
+          <figure class="media-figure">
+            <img src="{{ $preview }}" alt="{{ .Params.alt }}">
+          </figure>
+        {{ else }}
+          <p>No local image file is assumed here. Add a remote preview image or source page when one is available.</p>
+        {{ end }}
+
+        {{ with .Params.alt }}<p class="meta">{{ . }}</p>{{ end }}
+      </section>
+
+      <section class="section-card">
+        <h2>Details</h2>
+        <dl class="details">
+          <dt>Type</dt>
+          <dd>{{ .Params.mediaType | default "media" | humanize }}</dd>
+
+          <dt>Recorded</dt>
+          <dd>{{ .Params.captured_at | default "Date not specified" }}</dd>
+
+          <dt>Related City</dt>
+          <dd>{{ .Params.related_city | default "Not specified" }}</dd>
+
+          <dt>Credit</dt>
+          <dd>
+            {{ with .Params.credit_url }}
+              <a href="{{ . }}">{{ $.Params.credit_name | default . }}</a>
+            {{ else }}
+              {{ .Params.credit_name | default "Not specified" }}
+            {{ end }}
+          </dd>
+
+          <dt>Source</dt>
+          <dd>
+            {{ with .Params.source_url }}
+              <a href="{{ . }}">Original source or reference page</a>
+            {{ else }}
+              Source page not provided
+            {{ end }}
+          </dd>
+
+          {{ with .Params.transcript_url }}
+            <dt>Transcript</dt>
+            <dd><a href="{{ . }}">Transcript or captions</a></dd>
+          {{ end }}
+        </dl>
+      </section>
+    </section>
+
+    <section class="page-intro page-card">
+      <h2>What This Item Shows</h2>
+      <div class="prose">
+        {{ .Content }}
+      </div>
+    </section>
+  </article>
+{{ end }}

@@ -1,0 +1,42 @@
+{{ define "main" }}
+  <section class="content-wrap">
+    <header class="page-intro page-card">
+      <p class="eyebrow">Events</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}<p class="lede">{{ . }}</p>{{ end }}
+      <div class="prose">
+        {{ .Content }}
+      </div>
+    </header>
+
+    {{ $events := where .Pages "Draft" false }}
+    {{ if gt (len $events) 0 }}
+      <section class="event-list" aria-label="Confirmed darshan events">
+        {{ range sort $events "Params.event_start" }}
+          {{ $city := .Params.location.address.addressLocality | default .Params.city }}
+          {{ $region := .Params.location.address.addressRegion | default .Params.region }}
+          {{ $country := .Params.location.address.addressCountry | default .Params.country | default "United States" }}
+          {{ $contactEmail := .Params.organizer.email | default .Params.contact_email }}
+          <article class="event-card">
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            <p class="meta">
+              {{ with $city }}{{ . }}{{ end }}{{ with $region }}{{ if $city }}, {{ end }}{{ . }}{{ end }}
+              {{ with $country }}{{ if or $city $region }} · {{ end }}{{ . }}{{ end }}
+            </p>
+            {{ with .Summary }}
+              <div class="prose">{{ . }}</div>
+            {{ else }}
+              {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+            {{ end }}
+            {{ with $contactEmail }}<p class="meta">Contact: <a href="mailto:{{ . }}">{{ . }}</a></p>{{ end }}
+          </article>
+        {{ end }}
+      </section>
+    {{ else }}
+      <section class="events-empty" aria-label="No confirmed events yet">
+        <h2>No confirmed US events are listed yet.</h2>
+        <p>When dates are confirmed, this section will publish the city, venue details, schedule information, and a local contact when one is available.</p>
+      </section>
+    {{ end }}
+  </section>
+{{ end }}

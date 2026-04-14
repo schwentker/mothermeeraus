@@ -1,0 +1,90 @@
+{{ $description := .Params.description | default site.Params.description }}
+{{ if .IsHome }}
+  <script type="application/ld+json">
+    {{ dict
+      "@context" "https://schema.org"
+      "@type" "WebSite"
+      "name" site.Title
+      "url" site.BaseURL
+      "description" $description
+      "inLanguage" "en-US"
+    | jsonify | safeJS }}
+  </script>
+  <script type="application/ld+json">
+    {{ dict
+      "@context" "https://schema.org"
+      "@type" "Organization"
+      "name" site.Title
+      "url" site.BaseURL
+      "description" $description
+    | jsonify | safeJS }}
+  </script>
+{{ else if eq .Section "events" }}
+  {{ if and .IsPage .Params.event_start }}
+    {{ $locationName := .Params.location.name | default .Params.location_name | default (.Params.location.address.addressLocality | default .Params.city) }}
+    {{ $street := .Params.location.address.streetAddress | default .Params.venue_address }}
+    {{ $locality := .Params.location.address.addressLocality | default .Params.city }}
+    {{ $region := .Params.location.address.addressRegion | default .Params.region }}
+    {{ $postalCode := .Params.location.address.postalCode }}
+    {{ $country := .Params.location.address.addressCountry | default .Params.country | default "United States" }}
+    {{ $eventSchema := dict
+      "@context" "https://schema.org"
+      "@type" "Event"
+      "name" .Title
+      "description" $description
+      "startDate" .Params.event_start
+      "endDate" (.Params.event_end | default .Params.event_start)
+      "eventAttendanceMode" (.Params.eventAttendanceMode | default "https://schema.org/OfflineEventAttendanceMode")
+      "eventStatus" (.Params.eventStatus | default "https://schema.org/EventScheduled")
+      "location" (dict
+        "@type" (.Params.location.type | default "Place")
+        "name" $locationName
+        "address" (dict
+          "@type" "PostalAddress"
+          "streetAddress" $street
+          "addressLocality" $locality
+          "addressRegion" $region
+          "postalCode" $postalCode
+          "addressCountry" $country
+        )
+      )
+    }}
+    {{ with .Params.organizer.name }}
+      {{ $eventSchema = merge $eventSchema (dict "organizer" (dict
+        "@type" ($.Params.organizer.type | default "Organization")
+        "name" .
+        "url" $.Params.organizer.url
+        "email" $.Params.organizer.email
+        "telephone" $.Params.organizer.telephone
+      )) }}
+    {{ end }}
+    {{ if or .Params.offers.url .Params.offers.price .Params.offers.availability }}
+      {{ $eventSchema = merge $eventSchema (dict "offers" (dict
+        "@type" (.Params.offers.type | default "Offer")
+        "url" .Params.offers.url
+        "price" .Params.offers.price
+        "priceCurrency" (.Params.offers.priceCurrency | default "USD")
+        "availability" (.Params.offers.availability | default "https://schema.org/InStock")
+        "validFrom" .Params.offers.validFrom
+      )) }}
+    {{ end }}
+    <script type="application/ld+json">
+      {{ $eventSchema | jsonify | safeJS }}
+    </script>
+  {{ end }}
+{{ else }}
+  <script type="application/ld+json">
+    {{ dict
+      "@context" "https://schema.org"
+      "@type" "WebPage"
+      "name" .Title
+      "url" .Permalink
+      "description" $description
+      "isPartOf" (dict
+        "@type" "WebSite"
+        "name" site.Title
+        "url" site.BaseURL
+      )
+    | jsonify | safeJS }}
+  </script>
+{{ end }}

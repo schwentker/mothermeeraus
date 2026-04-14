@@ -1,0 +1,122 @@
+{{ define "main" }}
+  {{ $aboutPage := site.GetPage "/about" }}
+  {{ $darshanPage := site.GetPage "/darshan" }}
+  {{ $eventsPage := site.GetPage "/events" }}
+  {{ $connectPage := site.GetPage "/connect" }}
+  {{ $mediaPage := site.GetPage "/media" }}
+  {{ $cutoff := now.Format "2006-01-02T15:04:05Z07:00" }}
+  {{ $upcoming := slice }}
+  {{ range where site.RegularPages "Section" "events" }}
+    {{ if and .Params.event_start (ge .Params.event_start $cutoff) }}
+      {{ $upcoming = $upcoming | append . }}
+    {{ end }}
+  {{ end }}
+  {{ $upcoming = sort $upcoming "Params.event_start" }}
+  {{ $homeEvents := slice }}
+  {{ range $upcoming }}
+    {{ if and .Params.featured (lt (len $homeEvents) 3) }}
+      {{ $homeEvents = $homeEvents | append . }}
+    {{ end }}
+  {{ end }}
+  {{ if lt (len $homeEvents) 3 }}
+    {{ range $upcoming }}
+      {{ if and (not .Params.featured) (lt (len $homeEvents) 3) }}
+        {{ $homeEvents = $homeEvents | append . }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  <section class="hero">
+    <div class="hero-panel">
+      <p class="eyebrow">Mother Meera US</p>
+      <h1>A quiet informational home for Mother Meera, darshan, and future event details.</h1>
+      <div class="lede prose">{{ .Content }}</div>
+    </div>
+  </section>
+
+  <div class="content-wrap home-stack">
+    <section class="page-card home-section" aria-labelledby="home-darshan">
+      <p class="eyebrow">Darshan</p>
+      <h2 id="home-darshan">What Is Darshan?</h2>
+      <p>Darshan is the time when each person comes before Mother Meera individually and receives her blessing in silence.</p>
+      <p>People usually wait quietly, approach when called, sit or kneel briefly, and then move on so others may come forward.</p>
+      <p><a href="{{ with $darshanPage }}{{ .RelPermalink }}{{ end }}">Read the fuller explanation</a></p>
+    </section>
+
+    <section class="page-card home-section" aria-labelledby="home-intro">
+      <p class="eyebrow">Mother Meera</p>
+      <h2 id="home-intro">Introduction</h2>
+      {{ with $aboutPage }}
+        <div class="prose">{{ .Content }}</div>
+      {{ end }}
+    </section>
+
+    <section class="page-card home-bridge" aria-labelledby="home-events-bridge">
+      <h2 id="home-events-bridge">Event Information Appears Here As Dates Are Confirmed.</h2>
+      <p>When darshan gatherings are scheduled in the United States, this site will publish the city, timing, and local contact information in one place.</p>
+    </section>
+
+    <section aria-labelledby="home-events">
+      <header class="page-card home-section">
+        <p class="eyebrow">Events</p>
+        <h2 id="home-events">Upcoming Gatherings</h2>
+        {{ with $eventsPage }}
+          <p>{{ .Params.description }}</p>
+        {{ end }}
+      </header>
+
+      {{ if gt (len $homeEvents) 0 }}
+        <div class="event-list">
+          {{ range $homeEvents }}
+            {{ $city := .Params.location.address.addressLocality | default .Params.city }}
+            {{ $region := .Params.location.address.addressRegion | default .Params.region }}
+            <article class="event-card">
+              <p class="eyebrow">{{ if .Params.featured }}Featured event{{ else }}Upcoming event{{ end }}</p>
+              <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+              {{ with .Params.event_start }}
+                <p class="meta"><time datetime="{{ . }}">{{ time.AsTime . | time.Format ":date_long" }}</time></p>
+              {{ end }}
+              <p class="meta">
+                {{ with $city }}{{ . }}{{ end }}{{ with $region }}{{ if $city }}, {{ end }}{{ . }}{{ end }}
+              </p>
+              {{ with .Summary }}
+                <div class="prose">{{ . }}</div>
+              {{ else }}
+                {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+              {{ end }}
+            </article>
+          {{ end }}
+        </div>
+      {{ else }}
+        <section class="events-empty" aria-label="No upcoming events">
+          <h3>No upcoming US events are published yet.</h3>
+          <p>Confirmed dates will appear here automatically once event entries are added with future start times.</p>
+        </section>
+      {{ end }}
+    </section>
+
+    <section class="page-card home-section" aria-labelledby="home-connect">
+      <p class="eyebrow">Connect</p>
+      <h2 id="home-connect">Practical Ways To Stay In Touch</h2>
+      {{ with $connectPage }}
+        <div class="prose">{{ .Content }}</div>
+        <p><a href="{{ .RelPermalink }}">Open Connect</a></p>
+      {{ end }}
+    </section>
+
+    <section class="page-card home-section" aria-labelledby="home-media">
+      <p class="eyebrow">Media</p>
+      <h2 id="home-media">Photographs And Video With Context</h2>
+      {{ with $mediaPage }}
+        <div class="prose">{{ .Content }}</div>
+        <p><a href="{{ .RelPermalink }}">Open Media</a></p>
+      {{ end }}
+    </section>
+
+    <section class="page-card home-closing" aria-labelledby="home-closing">
+      <p class="eyebrow">Closing</p>
+      <h2 id="home-closing">This Site Is Meant To Clarify.</h2>
+      <p>Its role is to describe Mother Meera, explain what darshan involves, and publish practical information as it becomes available, without asking the visitor to adopt a particular mood or response.</p>
+    </section>
+  </div>
+{{ end }}

@@ -1,0 +1,50 @@
+{{ define "main" }}
+  <section class="content-wrap">
+    <header class="page-intro page-card">
+      <p class="eyebrow">Media</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}<p class="lede">{{ . }}</p>{{ end }}
+      <div class="prose">
+        {{ .Content }}
+        <p>Large original media files are not stored in this repository. Entries should reference remote previews, external embeds, or source pages.</p>
+      </div>
+    </header>
+
+    {{ $items := .Pages.ByDate.Reverse }}
+    {{ if gt (len $items) 0 }}
+      <section class="media-list" aria-label="Media archive">
+        {{ range $items }}
+          {{ $preview := .Params.thumbnail }}
+          {{ $isVideo := eq .Params.mediaType "video" }}
+          <article class="section-card media-card">
+            <div class="media-card-preview" aria-hidden="true">
+              {{ if and (not $isVideo) $preview }}
+                <img src="{{ $preview }}" alt="">
+              {{ else if $isVideo }}
+                <div class="media-placeholder">Video</div>
+              {{ else }}
+                <div class="media-placeholder">Image</div>
+              {{ end }}
+            </div>
+
+            <div class="media-card-body">
+              <p class="eyebrow">{{ .Params.mediaType | default "media" | humanize }}</p>
+              <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+              {{ with .Summary }}
+                <div class="prose">{{ . }}</div>
+              {{ else }}
+                {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+              {{ end }}
+              {{ with .Params.alt }}<p class="meta">{{ . }}</p>{{ end }}
+            </div>
+          </article>
+        {{ end }}
+      </section>
+    {{ else }}
+      <section class="events-empty" aria-label="No media items yet">
+        <h2>No media items are published yet.</h2>
+        <p>When photographs or videos are added, each entry will include a plain description alongside the image or embedded video.</p>
+      </section>
+    {{ end }}
+  </section>
+{{ end }}

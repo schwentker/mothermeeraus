@@ -1,0 +1,76 @@
+{{ define "main" }}
+  {{ $city := .Params.location.address.addressLocality | default .Params.city }}
+  {{ $region := .Params.location.address.addressRegion | default .Params.region }}
+  {{ $locationName := .Params.location.name | default .Params.location_name }}
+  {{ $organizerName := .Params.organizer.name }}
+  {{ $organizerEmail := .Params.organizer.email | default .Params.contact_email }}
+  {{ $offerURL := .Params.offers.url }}
+  {{ $status := .Params.eventStatus | default "https://schema.org/EventScheduled" }}
+  <article class="content-wrap">
+    <header class="page-intro page-card">
+      <p class="eyebrow">Event</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}<p class="lede">{{ . }}</p>{{ end }}
+      <div class="prose">
+        {{ .Content }}
+      </div>
+    </header>
+
+    <section class="section-grid" aria-label="Event details">
+      <section class="section-card">
+        <h2>Event Details</h2>
+        <dl class="details">
+          <dt>Date</dt>
+          <dd>
+            {{ with .Params.event_start }}
+              <time datetime="{{ . }}">{{ time.AsTime . | time.Format ":date_long" }}</time>
+            {{ else }}
+              To be confirmed
+            {{ end }}
+          </dd>
+
+          <dt>City</dt>
+          <dd>
+            {{ with $city }}
+              {{ . }}{{ with $region }}, {{ . }}{{ end }}
+            {{ else }}
+              To be confirmed
+            {{ end }}
+          </dd>
+
+          <dt>Location</dt>
+          <dd>{{ $locationName | default "Venue details will be added when available." }}</dd>
+
+          <dt>Organizer</dt>
+          <dd>{{ $organizerName | default "Organizer details will be added with the confirmed event." }}</dd>
+
+          <dt>Contact</dt>
+          <dd>
+            {{ with $organizerEmail }}
+              <a href="mailto:{{ . }}">{{ . }}</a>
+            {{ else }}
+              Local contact details will be posted with the confirmed event.
+            {{ end }}
+          </dd>
+
+          <dt>Status</dt>
+          <dd>{{ replaceRE "^https://schema.org/" "" $status | humanize }}</dd>
+
+          <dt>Registration</dt>
+          <dd>
+            {{ with $offerURL }}
+              <a href="{{ . }}">Event registration or details</a>
+            {{ else }}
+              Registration details will be added if they are needed for this event.
+            {{ end }}
+          </dd>
+        </dl>
+      </section>
+
+      <section class="section-card">
+        <h2>Why This Page Exists</h2>
+        <p>An event page separates practical travel and scheduling details from the broader explanation of darshan. Each listing should make the date, city, and point of contact clear enough to act on without guesswork.</p>
+      </section>
+    </section>
+  </article>
+{{ end }}
