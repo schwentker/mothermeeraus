@@ -8,5 +8,21 @@
         {{ .Content }}
       </div>
     </header>
+
+    {{ with .CurrentSection }}
+      {{ $siblings := where .RegularPages "RelPermalink" "ne" $.RelPermalink }}
+      {{ if gt (len $siblings) 0 }}
+        <section class="section-grid" aria-label="More in {{ .Title }}">
+          {{ range first 6 $siblings.ByTitle }}
+            {{ $preview := .Params.description | default (.Plain | truncate 180) }}
+            <article class="section-card">
+              <p class="eyebrow">More in {{ $.CurrentSection.Title }}</p>
+              <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+              {{ with $preview }}<p>{{ . }}</p>{{ end }}
+            </article>
+          {{ end }}
+        </section>
+      {{ end }}
+    {{ end }}
   </article>
 {{ end }}

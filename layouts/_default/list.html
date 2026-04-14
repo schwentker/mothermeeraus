@@ -1,7 +1,7 @@
 {{ define "main" }}
   <section class="content-wrap">
     <header class="page-intro page-card">
-      <p class="eyebrow">Section</p>
+      <p class="eyebrow">{{ .Title }}</p>
       <h1>{{ .Title }}</h1>
       {{ with .Params.description }}<p class="lede">{{ . }}</p>{{ end }}
       <div class="prose">
@@ -9,16 +9,15 @@
       </div>
     </header>
 
-    {{ if .Pages }}
+    {{ $pages := .RegularPages.ByTitle }}
+    {{ if gt (len $pages) 0 }}
       <section class="section-grid" aria-label="{{ .Title }} pages">
-        {{ range .Pages.ByTitle }}
+        {{ range $pages }}
+          {{ $preview := .Params.description | default (.Plain | truncate 220) }}
           <article class="section-card">
             <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-            {{ with .Summary }}
-              <div class="prose">{{ . }}</div>
-            {{ else }}
-              {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
-            {{ end }}
+            {{ with $preview }}<p>{{ . }}</p>{{ end }}
+            <p><a href="{{ .RelPermalink }}">Read page</a></p>
           </article>
         {{ end }}
       </section>
