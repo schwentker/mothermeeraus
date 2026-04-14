@@ -1,0 +1,28 @@
+{
+  "name": "mothermeeraus",
+  "version": "1.0.0",
+  "description": "Mother Meera US is a Hugo-based migration and redesign of the existing WordPress site at `https://mothermeerausa.org/`.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "hugo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schwentker/mothermeeraus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/schwentker/mothermeeraus/issues"
+  },
+  "homepage": "https://github.com/schwentker/mothermeeraus#readme",
+  "devDependencies": {
+    "hugo-bin": "^0.149.2"
+  }
+}
