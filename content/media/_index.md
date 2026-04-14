@@ -1,6 +1,8 @@
-+++
-title = "Media"
-description = "Photographs and videos related to Mother Meera and darshan."
-+++
+---
+title: "Media"
+slug: "media"
+type: "page"
+description: "A media section prepared for future photo and video entries."
+---
 
-The media section gathers photographs and videos that document places, gatherings, and recorded material connected with Mother Meera. Images are included for context, but each item should also be described in plain text so meaning does not depend on visuals alone.
+This section is prepared for future photo and video entries. Media items should be described in plain text and should rely on external hosting or lightweight previews rather than large files stored in Git.

@@ -1,6 +1,8 @@
-+++
-title = "About"
-description = "Background information on Mother Meera and the purpose of this site."
-+++
+---
+title: "About"
+slug: "about"
+type: "page"
+description: "Background on Mother Meera, Mother’s work, prayer, inner contact, japa, and the schools in India."
+---
 
-Mother Meera is known for giving darshan in silence. This section provides basic context about Mother Meera and explains the purpose of this US site as an informational resource rather than an institutional campaign.
+This section gathers background material on Mother Meera and related practice-oriented pages from the former site. It is organized so that readers can move from basic introduction to more specific questions about Mother’s work, asking for help, inner contact, japa, and the schools in India.

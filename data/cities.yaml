@@ -1,0 +1,48 @@
+- city: Ann Arbor
+  state: MI
+- city: Ashland
+  state: OR
+- city: Bellingham
+  state: WA
+- city: Boone
+  state: NC
+- city: Boston
+  state: MA
+- city: Buffalo
+  state: NY
+- city: Chicago
+  state: IL
+- city: Cleveland
+  state: OH
+- city: Colorado
+  state: CO
+- city: Connecticut
+  state: CT
+- city: Corvallis
+  state: OR
+- city: Florida
+  state: FL
+- city: Hawaii
+  state: HI
+- city: Los Angeles
+  state: CA
+- city: New York City
+  state: NY
+- city: Philadelphia
+  state: PA
+- city: Phoenix
+  state: AZ
+- city: Raleigh/Durham
+  state: NC
+- city: San Diego
+  state: CA
+- city: San Francisco
+  state: CA
+- city: Santa Fe
+  state: NM
+- city: Sedona
+  state: AZ
+- city: Texas
+  state: TX
+- city: Washington
+  state: DC

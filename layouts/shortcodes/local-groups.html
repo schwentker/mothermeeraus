@@ -1,0 +1,11 @@
+<div class="section-grid" aria-label="Local groups">
+  {{ range sort site.Data.cities "city" }}
+    <article class="section-card">
+      <h2>{{ .city }}{{ with .state }}, {{ . }}{{ end }}</h2>
+      {{ with .contact_name }}<p><strong>Contact:</strong> {{ . }}</p>{{ end }}
+      {{ with .email }}<p><strong>Email:</strong> <a href="mailto:{{ . }}">{{ . }}</a></p>{{ end }}
+      {{ with .phone }}<p><strong>Phone:</strong> {{ . }}</p>{{ end }}
+      {{ with .address }}<p><strong>Address:</strong> {{ . }}</p>{{ end }}
+    </article>
+  {{ end }}
+</div>

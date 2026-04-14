@@ -1,6 +1,8 @@
-+++
-title = "Events"
-description = "Dates, locations, and practical details for future darshan events."
-+++
+---
+title: "Events"
+slug: "events"
+type: "page"
+description: "Event-related material drawn from the former reservations, schedule, and online meditation pages."
+---
 
-The events section lists confirmed darshan dates and practical information such as city, venue details, and a local contact when available. It exists to help visitors distinguish between general background information and time-specific arrangements.
+This section gathers event-related information from the former site. It includes reservations guidance, schedule-related notes, and the information that previously appeared on the online meditations page.
